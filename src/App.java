@@ -1,229 +1,105 @@
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import classes.ArrayHandler;
+import classes.ReadWriteHandler;
+import classes.SortingAlgorithms;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class App {
-
-    //E is placeholder for data type. Comparealbe E to check if the elements are comparable. If return 1, left is bigger than right
-    // equal to each other, return 0, right is bigger than left, return -1, check comparable generic
-    //E is bounded by Comparable E.
-    public static <E extends Comparable<E>> void mergeSort(E[] list ){
-        mergeSort(list, 0, list.length);
-    }
-
-    public static <E extends Comparable<E>> void mergeSort(E[] list, int startIndex, int endIndex){
-        //check if there is 1 element or less, exit if true
-        if(endIndex - startIndex <= 1){
-            return;
-        }
-        int middleIndex = (startIndex + endIndex) / 2;
-        mergeSort(list, startIndex, middleIndex); //first split of start to middle
-        mergeSort(list, middleIndex, endIndex);// second split of middle to end
-        merge(list,startIndex,middleIndex,endIndex);
-    }
-    
-    public static <E extends Comparable<E>> void merge(E[] list, int startIndex, int middleIndex, int endIndex){
-        int i = startIndex, j = middleIndex; //k = 0; //i for left array. starting point of first, j for right array. starting point of second, k for temp array
-        List<E> tempArray = new ArrayList<E>();
-
-        while(i < middleIndex && j < endIndex){
-            if(list[i].compareTo(list[j]) <= 0){ //if one is bigger, this compareto will return a pos number
-                tempArray.add(list[i]);
-                i++;
-            } else {
-                tempArray.add(list[j]);
-                j++;
-            }
-          
-        }
-
-        //for when one side is completed, for first array
-        while(i < middleIndex){
-            tempArray.add(list[i]);
-            i++;
-           
-        }
-
-        //same thing but for second array
-        while(j < endIndex){
-            tempArray.add(list[j]);
-            j++;
-            
-        }
-
-        for (i = startIndex; i < endIndex; i++){
-            list[i] = tempArray.get(i - startIndex);
-        }
-
-    }
-    /* 
-    public static void mergeSort(int[] array){
-        mergeSort(array, 0, array.length);
-    }
-
-    public static void mergeSort(int[] array, int startIndex, int endIndex){
-        if(endIndex - startIndex <= 1){
-            return;
-        }
-        int middleIndex = (startIndex + endIndex) / 2;
-        mergeSort(array, startIndex, middleIndex); //first split of start to middle
-        mergeSort(array, middleIndex, endIndex);// second split of middle to end
-        merge(array,startIndex,middleIndex,endIndex);
-    }
-
-    public static void merge(int[] array, int startIndex, int middleIndex, int endIndex){
-        int i = startIndex, j = middleIndex, k = 0; //i for left array. starting point of first, j for right array. starting point of second, k for temp array
-        int[] tempArray = new int[endIndex-startIndex];
-
-        while(i < middleIndex && j < endIndex){
-            if(array[i] <= array[j]){
-                tempArray[k] = array[i];
-                i++;
-            } else {
-                tempArray[k] = array[j];
-                j++;
-            }
-            k++;
-        }
-
-        //for when one side is completed, for first array
-        while(i < middleIndex){
-            tempArray[k] = array[i];
-            i++;
-            k++;
-        }
-
-        //same thing but for second array
-        while(j < endIndex){
-            tempArray[k] = array[j];
-            j++;
-            k++;
-        }
-
-        for (i = startIndex; i < endIndex; i++){
-            array[i] = tempArray[i - startIndex];
-        }
-
-    }
-*/
-    public static void bubbleSort(int[] array){
-        int comparisons = 0;
-        int passes = 0;
-        //first loop is number of passes
-        for(int i=0; i< array.length - 1; i++){
-            boolean swapped = false; // for each pass, check if there is a swap that occured from previous pass, if not, array is sorted
-            //second loop to compare each element
-            for(int j=0; j < array.length - i - 1; j++){
-                //compare array at now and next index
-                //if array at j is bigger, swap
-                if(array[j] > array[j+1]){
-                    int temp = array[j];// saves the value of array[j] to temp
-                    array[j] = array[j+1];// repleaces the value of array[j] with array[j+1]
-                    array[j+1] = temp; // replaces the value of array[j+1] with temp
-                    swapped = true; // if there is a swap, set swapped to true
-                    comparisons++;
-                }
-            }
-            //if there is no swap, break the loop
-            if (!swapped){
-                break;
-            }
-        }
-    }
-
-    public static <E extends Comparable<E>> boolean isSorted(E[] array){
-        for(int i = 0; i < array.length - 1; i++){
-            //check for each element, if the current element is greater than the next element, return false
-            if(array[i].compareTo(array[i - 1]) > 0){
-                return false; 
-            }
-        }
-        //otherwise return true if the array is sorted
-        return true;
-    }
-    public static boolean isSorted(int array[]){
-        for(int i = 0; i < array.length - 1; i++){
-            //check for each element, if the current element is greater than the next element, return false
-            if(array[i] > array[i+1]){
-                return false; 
-            }
-        }
-        //otherwise return true if the array is sorted
-        return true;
-    }
-
-    public static int[] generateRandomArray(int size){
-        Random random = new Random();
-        int array[] = new int[size];   
-        for(int i = 0; i < size; i++){
-            array[i] = random.nextInt();
-        }
-        return array;
-    }
-
-    public static void writeArraytoFile(int array[], String filename){
-        try (BufferedWriter output = new BufferedWriter(new FileWriter(new File(filename)))){
-            for(int i = 0; i < array.length; i++){
-                output.write(array[i] + " ");
-            }
-            output.close();
-        } catch(Exception e) {
-            System.err.println("An error occurred while writing to the file: " + e.getMessage());
-        }
-    }
-
-    public static void readArrayfromFile(String filename){
-        try (BufferedReader file = new BufferedReader(new FileReader(filename))){
-            String line = file.readLine();
-            while(line != null){
-                System.out.println(line);
-                line = file.readLine();
-            }
-            file.close();
-        } catch(Exception e){
-            System.err.println("An error occurred while reading from the file: " + e.getMessage());
-        }
-    }
-
     public static void main(String[] args) throws Exception {
-        //int array[] = generateRandomArray(10);
-        //Integer[] list = new Integer[10];
-        //Random random = new Random();
+/* 
+        //if user passes nothing
+        if (args.length == 0) {
+            System.out.println("There was nothing passed into the program as an argument. Please provide a textfile or a numerical value");
 
-        Student[] studentList = new Student[5];
-        studentList[0] = new Student(10, "hello");
-        studentList[1] = new Student(120, "renlo");
-        studentList[2] = new Student(330, "sello");
-       
+        } else if (args.length == 1) { */
+           String store = "randomlyGeneratedArrayof[10]Numbers.txt";
+           List<Integer> list = new ArrayList<>();
+           List<Integer> list2 = new ArrayList<>();
 
+           //Check if the passed argument is a passed file or a numerical value
+           if (store.contains(".txt") == true){
+           // array = new int[ReadWriteHandler.getArraySize(store)]; //initialize the array with the size of the file
+            list = ReadWriteHandler.readArrayfromFile(store);// read array from file and put into variable
+            System.out.println("Is the intial array sorted? " + ArrayHandler.isSorted(list));
+            list2.addAll(list); //this is because i dont know if when u use bubblesort, mergesort will be sorting the already sorted numbers.
+            
+            for (int i = 0; i < list.size(); i++){
+                System.out.println(list.get(i));
+            }
+            System.out.println("next line is after");
+            long bubbleStartTime = System.currentTimeMillis();
+            SortingAlgorithms.bubbleSort(list); //sort the array
+            
+            for (int i = 0; i < list.size(); i++){
+                System.out.println(list.get(i));
+            }
+            
+            long bubbleEndTime = System.currentTimeMillis();
+            System.out.println("Bubble Sort took " + (bubbleEndTime - bubbleStartTime) + "ms to sort the array");
+            System.out.println("Is the final array sorted? " + ArrayHandler.isSorted(list));
+            ReadWriteHandler.writeArraytoFile(list, "BubblesortedGivenArray.txt");//write the array to new file
 
+            long mergeStartTime = System.currentTimeMillis();
+            SortingAlgorithms.mergeSort(list2); //sort the array
+            long mergeEndTime = System.currentTimeMillis();
+            System.out.println("Merge Sort took " + (mergeEndTime - mergeStartTime) + "ms to sort the array");
+            System.out.println("Is the final array sorted? " + ArrayHandler.isSorted(list2));
+            ReadWriteHandler.writeArraytoFile(list2, "MergesortedGivenArray.txt");//write the array to new file
 
+            if((mergeEndTime - mergeStartTime) < (bubbleEndTime - bubbleStartTime)){
+                System.out.println("Merge sort is faster by: " + ((bubbleEndTime - bubbleStartTime) - (mergeEndTime - mergeStartTime) ) + "ms");
+            } else if ((mergeEndTime - mergeStartTime) > (bubbleEndTime - bubbleStartTime)){
+                System.out.println("Bubble sort is faster by: " + ((mergeEndTime - mergeStartTime) - (bubbleEndTime - bubbleStartTime)) + "ms");
+            } else if ((mergeEndTime - mergeStartTime) == (bubbleEndTime - bubbleStartTime)){
+                System.out.println("Both sorting methods took the same time.");
+            } else {
+                System.out.println("Seems like an error has occured comparing times.");
+            }
+            
+            
 
-        //for (int i = 0; i < list.length; i++) {
-          //  list[i] = random.nextInt();
-        //}
+            //if the passed argument is a numerical value and does not include .txt
+            } else if (ArrayHandler.isNumeric(store) == true){
+                list = new ArrayList<>();
+                list2 = new ArrayList<>();
+                Random random = new Random();
 
-        //writeArraytoFile(array, "filename.txt");
-        System.out.println("Array before sorting: ");
-       // System.out.println(java.util.Arrays.toString(array)); //shortcut to print array instead of for loop
-       // System.out.println(isSorted(studentList));
+                System.out.println("Generated random array of size " + store);
+                for (int i = 0; i < Integer.parseInt(store); i++){
+                    list.add(random.nextInt(1,100));
+                }
+                ReadWriteHandler.writeArraytoFile(list, "randomlyGeneratedArrayof[" + store + "]Numbers.txt");//write the array to new file
+                System.out.println("Is the intial array sorted? " + ArrayHandler.isSorted(list));
+                list2.addAll(list);
 
-        long start = System.currentTimeMillis();
-        System.out.println("Array after sorting: ");
-        //bubbleSort(array);
-        mergeSort(studentList);
-        long end = System.currentTimeMillis();
-       // System.out.println(java.util.Arrays.toString(array));
-        System.out.println("Time taken: " + (end - start) + "ms");
-        //System.out.println(java.util.Arrays);
+                long bubbleStartTime = System.currentTimeMillis();
+                SortingAlgorithms.bubbleSort(list); //sort the array
+                long bubbleEndTime = System.currentTimeMillis();
+                System.out.println("Bubble Sort took " + (bubbleEndTime - bubbleStartTime) + "ms to sort the array");
+                System.out.println("Is the final array sorted? " + ArrayHandler.isSorted(list));
+                ReadWriteHandler.writeArraytoFile(list, "BubblesortedGeneratedArray.txt");//write the array to new file
 
-    }
+                long mergeStartTime = System.currentTimeMillis();
+                SortingAlgorithms.mergeSort(list2); //sort the array
+                long mergeEndTime = System.currentTimeMillis();
+                 System.out.println("Merge Sort took " + (mergeEndTime - mergeStartTime) + "ms to sort the array");
+                System.out.println("Is the final array sorted? " + ArrayHandler.isSorted(list2));
+                ReadWriteHandler.writeArraytoFile(list2, "MergesortedGeneratedArray.txt");//write the array to new file
 
-    
-}
+                if((mergeEndTime - mergeStartTime) < (bubbleEndTime - bubbleStartTime)){
+                    System.out.println("Merge sort is faster by: " + ((bubbleEndTime - bubbleStartTime) - (mergeEndTime - mergeStartTime) ) + "ms");
+                } else if ((mergeEndTime - mergeStartTime) > (bubbleEndTime - bubbleStartTime)){
+                    System.out.println("Bubble sort is faster by: " + ((mergeEndTime - mergeStartTime) - (bubbleEndTime - bubbleStartTime)) + "ms");
+                } else if ((mergeEndTime - mergeStartTime) == (bubbleEndTime - bubbleStartTime)){
+                    System.out.println("Both sorting methods took the same time.");
+                } else {
+                    System.out.println("Seems like an error has occured comparing times.");
+                }
+
+            } else {
+                System.out.println("Please provide a valid textfile or a numerical value");
+            }
+        }//end if 2 
+    }//end if
+//}//end app
