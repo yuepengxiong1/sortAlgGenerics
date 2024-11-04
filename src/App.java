@@ -13,7 +13,7 @@ public class App {
             System.out.println("There was nothing passed into the program as an argument. Please provide a textfile or a numerical value");
 
         } else if (args.length == 1) { 
-           String store = "randomlyGeneratedArrayof[10]Numbers.txt";
+           String store = args[0];
            List<Integer> list = new ArrayList<>();
            List<Integer> list2 = new ArrayList<>();
 
@@ -24,16 +24,20 @@ public class App {
             System.out.println("Is the intial array sorted? " + ArrayHandler.isSorted(list));
             list2.addAll(list); //this is because i dont know if when u use bubblesort, mergesort will be sorting the already sorted numbers.
             
+            System.out.println("List1 before bubblesort: ");
             for (int i = 0; i < list.size(); i++){
-                System.out.println(list.get(i));
+                System.out.print(list.get(i) + " ");
             }
-            System.out.println("next line is after");
+            System.out.println(" ");
+
             long bubbleStartTime = System.currentTimeMillis();
             SortingAlgorithms.bubbleSort(list); //sort the array
             
+            System.out.println("List1 After bubblesort: ");
             for (int i = 0; i < list.size(); i++){
-                System.out.println(list.get(i));
+                System.out.print(list.get(i) + " ");
             }
+            System.out.println(" ");
             
             long bubbleEndTime = System.currentTimeMillis();
             System.out.println("Bubble Sort took " + (bubbleEndTime - bubbleStartTime) + "ms to sort the array");

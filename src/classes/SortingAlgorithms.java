@@ -13,6 +13,9 @@ public class SortingAlgorithms {
             for(int j=0; j < array.size() - i - 1; j++){
                 //compare array at now and next index
                 //if array at j is bigger, swap
+                System.out.println("Array.get(" + j + "): " + array.get(j));
+                System.out.println("Array.get(" + j + " + 1): " + array.get(j + 1));
+                System.out.println(array.get(j).compareTo(array.get(j + 1)));
                 if(array.get(j).compareTo(array.get(j + 1)) > 0){ //>
                     E temp = array.get(j);// saves the value of array[j] to temp
                     array.set(j, array.get(j + 1));// repleaces the value of array[j] with array[j+1]
