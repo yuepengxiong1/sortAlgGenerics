@@ -7,12 +7,12 @@ import java.util.Random;
 
 public class App {
     public static void main(String[] args) throws Exception {
-/* 
+ 
         //if user passes nothing
         if (args.length == 0) {
             System.out.println("There was nothing passed into the program as an argument. Please provide a textfile or a numerical value");
 
-        } else if (args.length == 1) { */
+        } else if (args.length == 1) { 
            String store = "randomlyGeneratedArrayof[10]Numbers.txt";
            List<Integer> list = new ArrayList<>();
            List<Integer> list2 = new ArrayList<>();
@@ -102,4 +102,4 @@ public class App {
             }
         }//end if 2 
     }//end if
-//}//end app
+}//end app
